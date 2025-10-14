@@ -28,7 +28,7 @@ def home():
     # db.session.add(test_record2)
     # db.session.commit()
     # Tu należy wyciągnąć dane tylko wyszukiwanego paczkomatu
-    return render_template("home.html", paczkomats='WE123')
+    return render_template("home.html", paczkomats='WE123', user=current_user)
 
 
 # # do przemyslenia i przerobienia - usuwanie opini

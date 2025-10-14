@@ -56,15 +56,15 @@ messages %} {% for category, message in messages %} {% if category ==
 
 <div class="container">
     <h1 align="center">PaczkOpinie</h1>
-    <ul class="list-group list-group-flush" id="notes">
-        {% for review in paczkomats.reviews %}
+    <ul class="list-group list-group-flush" id="reviews">
+        {% for review in user.reviews %}
         <li class="list-group-item">
-            {{ reviews.user_id }}
-            {{ reviews.date }}
-            {{ reviews.code_id }}
-            {{ reviews.rating }}
-            {{ reviews.review }}
-            <!--    <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+            {{ review.user_id }}
+            {{ review.date }}
+            {{ review.code_id }}
+            {{ review.rating }}
+            {{ review.review }}
+            <!--    <button type="button" class="close" onClick="deleteNote({ note.id skasowalem tu {} })">
                     <span aria-hidden="true">&times;</span>
                 </button> -->
         </li>
