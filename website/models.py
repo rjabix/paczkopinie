@@ -29,5 +29,5 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     nickname = db.Column(db.String(150))
     notes = db.relationship('Note')
-   # notes = db.relationship('Reviews')
+    reviews = db.relationship('Reviews')
 
