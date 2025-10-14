@@ -44,6 +44,7 @@ def sign_up():
         password2 = request.form.get('password2')
 
         user = User.query.filter_by(email=email).first()
+        # DODAĆ MOŻE SPRAWDZANIE FORMY MAILA
         if user:
             flash('Błędne dane', category='error')
         elif len(email) < 6:

@@ -11,17 +11,17 @@ class Note(db.Model):
 
 class Reviews(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     code_id = db.Column(db.String(10), db.ForeignKey('paczkomats.code_id'))
     rating = db.Column(db.Integer)
-    date = db.Column(db.DateTime(timezone=True), default=func.now())
     review = db.Column(db.String(300))
 
 class Paczkomats(db.Model):
     code_id = db.Column(db.String(10), primary_key=True, autoincrement=False)
     address = db.Column(db.String(200))
     additional_info = db.Column(db.String(500))
-   # notes = db.relationship('Reviews')
+    reviews = db.relationship('Reviews')
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
