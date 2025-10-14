@@ -9,10 +9,24 @@ class Note(db.Model):
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+class Reviews(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    rating = db.Column(db.Integer)
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
+    review = db.Column(db.String(300))
+
+class Paczkomats(db.Model):
+    code_id = db.Column(db.String(10), primary_key=True, autoincrement=False)
+    address = db.Column(db.String(200))
+    additional_info = db.Column(db.String(500))
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
-    first_name = db.Column(db.String(150))
+    nickname = db.Column(db.String(150))
     notes = db.relationship('Note')
+   # notes = db.relationship('Reviews')
+

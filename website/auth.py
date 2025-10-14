@@ -21,9 +21,9 @@ def login():
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
             else:
-                flash('Błędne hasło, spróbuj ponownie!', category='error')
+                flash('Błędny email lub hasło!', category='error')
         else:
-            flash('Adres e-mail nie istnieje.', category='error')
+            flash('Błędny email lub hasło!', category='error')
 
     return render_template("login.html", user=current_user)
 
@@ -39,24 +39,23 @@ def logout():
 def sign_up():
     if request.method == 'POST':
         email = request.form.get('email')
-        first_name = request.form.get('firstName')
+        nickname = request.form.get('nickName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
         user = User.query.filter_by(email=email).first()
         if user:
-            flash('Adres e-mail już istnieje.', category='error')
-        elif len(email) < 4:
-            flash('Adres e-mail musi być dłuższy niż 3 znaki.', category='error')
-        elif len(first_name) < 2:
-            flash('Imię musi być dłuższe niż 1 znak.', category='error')
+            flash('Błędne dane', category='error')
+        elif len(email) < 6:
+            flash('Adres e-mail musi być dłuższy niż 5 znaków', category='error')
+        elif len(nickname) < 3:
+            flash('Imię musi być dłuższe niż 2 znaki.', category='error')
         elif password1 != password2:
             flash('Hasła nie są identyczne.', category='error')
-        elif len(password1) < 7:
-            flash('Hasło musi zawierać co najmniej 7 znaków.', category='error')
+        elif len(password1) < 10:
+            flash('Hasło musi zawierać co najmniej 10 znaków.', category='error')
         else:
-            new_user = User(email=email, first_name=first_name, password=generate_password_hash(
-                password1, method='scrypt'))
+            new_user = User(email=email, nickname=nickname, password=generate_password_hash(password1, method='scrypt'))
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
