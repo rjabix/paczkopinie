@@ -8,6 +8,7 @@ import boto3
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 import os
+import json
 
 def create_aws_db_uri() -> str | None:
     try:
@@ -21,10 +22,11 @@ def create_aws_db_uri() -> str | None:
         if not secret:
             return None
 
-        username = eval(secret).get("username")
-        password = eval(secret).get("password")
+        secret_dict = json.loads(secret)
+        username = secret_dict.get("username")
+        password = secret_dict.get("password")
 
-        return f"mysql+mysqlconnector://{username}:{password}@{endpoint_name}:{port_name}/{db_name}"
+        return f"mysql+mysqlconnector://{username}:{password}@{endpoint_name}/{db_name}"
     except:
         return None
 

@@ -3,4 +3,4 @@
 .vscode
 website/__pycache__
 website/database.db
-.env
+website/.env

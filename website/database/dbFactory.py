@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-from website.database.cloudHelper import get_secret, create_aws_db_uri
+from website.database.cloudHelper import create_aws_db_uri
 
 LOCAL_DB_NAME = "database.db"
 
