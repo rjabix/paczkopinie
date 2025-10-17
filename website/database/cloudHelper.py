@@ -2,13 +2,14 @@
 # If you need more information about configurations
 # or implementing the sample code, visit the AWS docs:
 # https://aws.amazon.com/developer/language/python/
-from typing import Any
+
+import json
+import os
 
 import boto3
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
-import os
-import json
+
 
 def create_aws_db_uri() -> str | None:
     try:
@@ -17,6 +18,9 @@ def create_aws_db_uri() -> str | None:
         endpoint_name = os.getenv("AWS_DB_ENDPOINT_NAME")
         port_name = os.getenv("AWS_DB_PORT_NAME")
         db_name = os.getenv("AWS_DB_NAME")
+
+        if not endpoint_name or not db_name:
+            return None
 
         secret = get_secret(os.getenv("AWS_SECRET_NAME"), os.getenv("AWS_REGION_NAME"))
         if not secret:

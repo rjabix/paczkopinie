@@ -58,15 +58,40 @@ messages %} {% for category, message in messages %} {% if category ==
     <h1 align="center">PaczkOpinie</h1>
     <div style="margin: 20px"></div>
 
-    <ul class="list-group list-group-flush" id="paczkomats">
-        {% for paczkomat_id, number_of_reviews in paczkomats.items() %}
+    <ul class="list-group list-group-flush" id="reviews">
+        {% for review in reviews %}
             <li class="list-group-item">
-                <a href="{{ url_for('views.paczkomat', paczkomat_id=paczkomat_id) }}">
-                    Paczkomat {{ paczkomat_id }} ({{ number_of_reviews }} reviews)
-                </a>
+                {{ review.user_id }}
+                {{ review.date }}
+                {{ review.code_id }}
+                {{ review.rating }}
+                {{ review.review }}
+                {% if review.user_id == user.id %}
+                    <form action="{{ url_for('views.delete_review', review_id=review.id) }}" style="display:inline;">
+                        <button type="submit" class="close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </form>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>
+
+    <form method="POST">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-star fs-2 rating-star" data-value="1"></i>
+            <i class="bi bi-star fs-2 rating-star" data-value="2"></i>
+            <i class="bi bi-star fs-2 rating-star" data-value="3"></i>
+            <i class="bi bi-star fs-2 rating-star" data-value="4"></i>
+            <i class="bi bi-star fs-2 rating-star" data-value="5"></i>
+        </div>
+        <input type="hidden" name="rating" id="ratingInput" value="0">
+        <textarea name="review" id="review" class="form-control"></textarea>
+        <br/>
+        <div align="center">
+            <button type="submit" class="btn btn-primary">Dodaj Opinię</button>
+        </div>
+    </form>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const stars = document.querySelectorAll('.rating-star');
