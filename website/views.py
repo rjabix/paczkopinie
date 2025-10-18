@@ -35,13 +35,28 @@ def paczkomat(paczkomat_id):
     if request.method == 'POST':
         rating = request.form.get('rating')
         review = request.form.get('review')
-        if len(rating) < 1:
+
+        if not rating:  # jeśli użytkownik nie zaznaczył oceny
             flash('Ocena jest wymagana!', category='error')
         else:
-            new_review = Reviews(user_id=current_user.id, code_id='WE123', rating=rating, review=review)
+            try:
+            
+                rating_value = int(rating)
+                stars = "⭐" * rating_value
+            except ValueError:
+                flash('Niepoprawna wartość oceny!', category='error')
+                return redirect(request.url)
+
+            # Tworzymy nową opinię z odpowiednią liczbą gwiazdek
+            new_review = Reviews(
+                user_id=current_user.id,
+                code_id=paczkomat_id,
+                rating=stars,
+                review=review
+            )
+
             repository.add_review(new_review)
             flash('Dodano nową opinię o paczkomacie!', category='success')
 
     reviews = repository.get_reviews_by_paczkomat_code_id(paczkomat_id)
     return render_template("paczkomat.html", reviews=reviews, user=current_user)
-
