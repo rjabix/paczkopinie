@@ -23,7 +23,7 @@ def home():
 def delete_review(review_id):
     repository = Repository(current_user, db)
     repository.delete_review(review_id)
-    flash('Review deleted!', category='success')
+    flash('Opinia usunięta!', category='success')
     return redirect(request.referrer or '/')
 
 
