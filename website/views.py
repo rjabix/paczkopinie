@@ -36,7 +36,7 @@ def paczkomat(paczkomat_id):
         rating = request.form.get('rating')
         review = request.form.get('review')
 
-        if not rating:  # jeśli użytkownik nie zaznaczył oceny
+        if not rating or int(rating) == 0:  # jeśli użytkownik nie zaznaczył oceny
             flash('Ocena jest wymagana!', category='error')
         else:
             try:
