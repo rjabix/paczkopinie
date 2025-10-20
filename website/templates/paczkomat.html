@@ -61,7 +61,7 @@ messages %} {% for category, message in messages %} {% if category ==
     <ul class="list-group list-group-flush" id="reviews">
         {% for review in reviews %}
             <li class="list-group-item">
-                {{ review.user_id }}
+                {{ review.user.nickname }}
                 {{ review.date }}
                 {{ review.code_id }}
                 {{ review.rating }}

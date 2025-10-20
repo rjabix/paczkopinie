@@ -16,6 +16,7 @@ class Reviews(db.Model):
     code_id = db.Column(db.String(10), db.ForeignKey('paczkomats.code_id'))
     rating = db.Column(db.Integer)
     review = db.Column(db.String(300))
+    user = db.relationship('User')
 
 class Paczkomats(db.Model):
     code_id = db.Column(db.String(10), primary_key=True, autoincrement=False)
@@ -28,6 +29,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     nickname = db.Column(db.String(150))
-    notes = db.relationship('Note')
-    reviews = db.relationship('Reviews')
+    # notes = db.relationship('Note')
+    # reviews = db.relationship('Reviews')
 
