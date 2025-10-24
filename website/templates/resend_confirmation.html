@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <title>Wyślij ponownie potwierdzenie</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <h1>Wyślij ponownie e‑mail potwierdzający</h1>
+    <form method="post" action="{{ url_for('auth.resend_confirmation') }}">
+        <label for="email">Adres e‑mail</label>
+        <input id="email" name="email" type="email" required>
+        <button type="submit">Wyślij</button>
+    </form>
+
+    <p><a href="{{ url_for('auth.login') }}">Powrót do logowania</a></p>
+</body>
+</html>

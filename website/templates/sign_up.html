@@ -100,5 +100,7 @@ messages %} {% for category, message in messages %} {% if category ==
         <button type="submit" class="btn btn-primary">Zarejestruj</button>
     </form>
 </div>
+<!-- np. pod linkiem "Masz już konto?" lub pod formularzem rejestracji -->
+<p>Jeśli nie otrzymałeś maila potwierdzającego po rejestracji, możesz go <a href="{{ url_for('auth.resend_confirmation') }}">wysłać ponownie</a>.</p>
 </body>
 </html>

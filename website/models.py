@@ -22,5 +22,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     nickname = db.Column(db.String(150))
+    confirmed = db.Column(db.Boolean, default=False)
     # reviews = db.relationship('Reviews')
 
