@@ -4,4 +4,4 @@
 website/__pycache__
 website/database.db
 website/.env
-website/instance/database.db
+instance/database.db
