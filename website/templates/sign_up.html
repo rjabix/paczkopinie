@@ -52,10 +52,12 @@ messages %} {% for category, message in messages %} {% if category ==
     </button>
 </div>
 {% endif %} {% endfor %} {% endif %} {% endwith %}
+
 <br>
+<h2 align="center">Zarejestruj się</h2>
+
 <div class="container">
     <form method="POST">
-        <h3 align="center">Zarejestruj się</h3>
         <div class="form-group">
             <label for="email">Adres e-mail</label>
             <input
@@ -101,8 +103,5 @@ messages %} {% for category, message in messages %} {% if category ==
     </form>
 </div>
 <br>
-<div class="container">
-    <p>Jeśli nie otrzymałeś maila potwierdzającego po rejestracji, możesz go <a href="{{ url_for('auth.resend_confirmation') }}">wysłać ponownie</a>.</p>
-</div>
 </body>
 </html>

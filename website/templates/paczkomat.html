@@ -54,10 +54,11 @@ messages %} {% for category, message in messages %} {% if category ==
     </div>
 {% endif %} {% endfor %} {% endif %} {% endwith %}
 
-<div class="container">
-    <h1 align="center">PaczkOpinie</h1>
-    <div style="margin: 20px"></div>
+<br>
+<h1 align="center">PaczkOpinie</h1>
 
+<div class="container">
+    <div style="margin: 20px"></div>
     <ul class="list-group list-group-flush" id="reviews">
         {% for review in reviews %}
             <li class="list-group-item">
@@ -77,6 +78,7 @@ messages %} {% for category, message in messages %} {% if category ==
         {% endfor %}
     </ul>
 
+    <br>
     <form method="POST">
         <div class="d-flex align-items-center">
             <i class="bi bi-star fs-2 rating-star" data-value="1"></i>

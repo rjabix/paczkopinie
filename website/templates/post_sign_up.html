@@ -15,7 +15,7 @@
             crossorigin="anonymous"
     />
 
-    <title>Potwierdzenie maila</title>
+    <title>Logowanie</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -34,16 +34,7 @@
         </div>
     </div>
 </nav>
-<!--<div class="container">-->
-<!--    {% with messages = get_flashed_messages(with_categories=true) %}-->
-<!--      {% if messages %}-->
-<!--        <ul>-->
-<!--          {% for category, message in messages %}-->
-<!--            <li class="{{ category }}">{{ message }}</li>-->
-<!--          {% endfor %}-->
-<!--        </ul>-->
-<!--      {% endif %}-->
-<!--    {% endwith %}-->
+
 {% with messages = get_flashed_messages(with_categories=true) %} {% if
 messages %} {% for category, message in messages %} {% if category ==
 'error' %}
@@ -62,25 +53,10 @@ messages %} {% for category, message in messages %} {% if category ==
 </div>
 {% endif %} {% endfor %} {% endif %} {% endwith %}
 
-    <br>
-    <h3 align="center">Wyślij ponownie e‑mail potwierdzający</h3>
-
-    <div class="container">
-    <form method="post" action="{{ url_for('auth.resend_confirmation') }}">
-    <div class="form-group">
-            <label for="email">Adres e-mail</label>
-            <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    name="email"
-                    placeholder="Wpisz email"
-                    required
-            />
-        </div>
-        <button type="submit" class="btn btn-primary">Wyślij</button>
-    </form>
-    <br>
+<br>
+<div class="container">
+<h3>Sprawdź swojego maila</h3>
+<p>Jeśli nie otrzymałeś maila potwierdzającego po rejestracji, możesz go <a href="{{ url_for('auth.resend_confirmation') }}">wysłać ponownie</a>.</p>
 </div>
 </body>
 </html>

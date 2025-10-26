@@ -68,7 +68,7 @@ def sign_up():
         elif len(email) < 6:
             flash('Adres e-mail musi być dłuższy niż 5 znaków', category='error')
         elif len(nickname) < 3:
-            flash('Imię musi być dłuższe niż 2 znaki.', category='error')
+            flash('Nick musi być dłuższy niż 2 znaki.', category='error')
         elif password1 != password2:
             flash('Hasła nie są identyczne.', category='error')
         elif len(password1) < 10:
@@ -80,10 +80,10 @@ def sign_up():
             try:
                 send_confirmation_email(email)
                 flash('Konto utworzone. Sprawdź e‑mail, aby aktywować konto.', category='success')
+                return render_template('post_sign_up.html', user=current_user)
             except Exception:
                 flash('Konto utworzone, ale nie udało się wysłać e‑maila. Skontaktuj się z administratorem.', category='error')
-            return redirect(url_for('auth.login'))
-
+                return redirect(url_for('auth.login'))
     return render_template("sign_up.html", user=current_user)
 
 
@@ -121,7 +121,7 @@ def resend_confirmation():
                 flash('Wysłano ponownie e‑mail potwierdzający.', category='success')
             except Exception:
                 flash('Błąd przy wysyłce e‑maila.', category='error')
-        else:
-            flash('Brak niepotwierdzonego konta o podanym e‑mailu.', category='error')
-        return redirect(url_for('auth.login'))
+        # else:
+        #     flash('Brak niepotwierdzonego konta o podanym e‑mailu.', category='error')
+        # return redirect(url_for('auth.login'))
     return render_template('resend_confirmation.html', user=current_user)

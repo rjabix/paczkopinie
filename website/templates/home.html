@@ -54,10 +54,11 @@ messages %} {% for category, message in messages %} {% if category ==
     </div>
 {% endif %} {% endfor %} {% endif %} {% endwith %}
 
-<div class="container">
-    <h1 align="center">PaczkOpinie</h1>
-    <div style="margin: 20px"></div>
+<br>
+<h1 align="center">PaczkOpinie</h1>
 
+<div class="container">
+    <div style="margin: 20px"></div>
     <ul class="list-group list-group-flush" id="paczkomats">
         {% for paczkomat_id, number_of_reviews in paczkomats.items() %}
             <li class="list-group-item">
@@ -90,7 +91,6 @@ messages %} {% for category, message in messages %} {% if category ==
             });
         });
     </script>
-
 </div>
 </body>
 </html>
