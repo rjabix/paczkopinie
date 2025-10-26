@@ -1,10 +1,41 @@
-<!doctype html>
-<html lang="pl">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="utf-8">
-    <title>Wyślij ponownie potwierdzenie</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+    />
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            crossorigin="anonymous"
+    />
+
+    <title>Potwierdzenie maila</title>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbar"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" id="login" href="/login">Zaloguj</a>
+            <a class="nav-item nav-link" id="signUp" href="/sign-up">Zarejestruj</a>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <ul>
@@ -15,13 +46,22 @@
       {% endif %}
     {% endwith %}
 
-    <h1>Wyślij ponownie e‑mail potwierdzający</h1>
+    <h3 align="center">Wyślij ponownie e‑mail potwierdzający</h3>
     <form method="post" action="{{ url_for('auth.resend_confirmation') }}">
-        <label for="email">Adres e‑mail</label>
-        <input id="email" name="email" type="email" required>
-        <button type="submit">Wyślij</button>
+    <div class="form-group">
+            <label for="email">Adres e-mail</label>
+            <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="Wpisz email"
+                    required
+            />
+        </div>
+        <button type="submit" class="btn btn-primary">Wyślij</button>
     </form>
-
-    <p><a href="{{ url_for('auth.login') }}">Powrót do logowania</a></p>
+    <br>
+</div>
 </body>
 </html>
