@@ -1,8 +1,8 @@
-import os
 from flask import Flask
 from flask_login import LoginManager
-from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
+from flask_sqlalchemy import SQLAlchemy
+
 from .database.dbFactory import create_db, seed_database
 
 mail = Mail()

@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect
 from flask_login import login_required, current_user
-from flask import jsonify
 
 from . import db
 from .database.repository import Repository
@@ -59,4 +58,5 @@ def paczkomat(paczkomat_id):
             flash('Dodano nową opinię o paczkomacie!', category='success')
 
     reviews = repository.get_reviews_by_paczkomat_code_id(paczkomat_id)
-    return render_template("paczkomat.html", reviews=reviews, user=current_user)
+    current_paczkomat = repository.get_paczkomat_by_code_id(paczkomat_id)
+    return render_template("paczkomat.html", reviews=reviews, user=current_user, paczkomat=current_paczkomat)

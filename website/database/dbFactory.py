@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -7,10 +9,15 @@ LOCAL_DB_NAME = "database.db"
 
 
 def create_db(db: SQLAlchemy, app: Flask) -> None:
-    secret: str = create_aws_db_uri()
+    env: str = None
+    try:
+        if os.environ.get("ENVIRONMENT") == "DEV":
+            env = "DEV"
+    except:
+        env = "Local"
 
-    if secret:
-        app.config['SQLALCHEMY_DATABASE_URI'] = secret
+    if env == "DEV":
+        app.config['SQLALCHEMY_DATABASE_URI'] = create_aws_db_uri()
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{LOCAL_DB_NAME}'
 

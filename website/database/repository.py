@@ -16,14 +16,17 @@ class Repository:
     def get_reviews_by_paczkomat_code_id(self, code_id: str) -> list[Reviews]:
         return Reviews.query.filter_by(code_id=code_id).all()
 
-    def get_paczkomats_and_number_of_reviews(self) -> dict[str, int]:
+    def get_paczkomat_by_code_id(self, code_id: str) -> Paczkomats | None:
+        return Paczkomats.query.filter_by(code_id=code_id).first()
+
+    def get_paczkomats_and_number_of_reviews(self) -> dict[Paczkomats, int]:
         from ..models import Paczkomats
         results = self.db.session.query(
             Paczkomats,
             self.db.func.count(Reviews.id).label('review_count')
         ).outerjoin(Reviews, Paczkomats.code_id == Reviews.code_id
                     ).group_by(Paczkomats.code_id).all()
-        return {paczkomat.code_id: review_count for paczkomat, review_count in results}
+        return {paczkomat: review_count for paczkomat, review_count in results}
 
 
     def delete_review(self, review_id: str) -> None:

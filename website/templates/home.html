@@ -60,10 +60,10 @@ messages %} {% for category, message in messages %} {% if category ==
 <div class="container">
     <div style="margin: 20px"></div>
     <ul class="list-group list-group-flush" id="paczkomats">
-        {% for paczkomat_id, number_of_reviews in paczkomats.items() %}
+        {% for paczkomat, number_of_reviews in paczkomats.items() %}
             <li class="list-group-item">
-                <a href="{{ url_for('views.paczkomat', paczkomat_id=paczkomat_id) }}">
-                    Paczkomat {{ paczkomat_id }} ({{ number_of_reviews }} opinii/a/e)
+                <a href="{{ url_for('views.paczkomat', paczkomat_id=paczkomat.code_id) }}">
+                    Paczkomat {{ paczkomat.code_id }} - {{ paczkomat.address }} ({{ number_of_reviews }} opinii/a/e)
                 </a>
             </li>
         {% endfor %}
