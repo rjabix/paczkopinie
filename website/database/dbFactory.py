@@ -13,9 +13,10 @@ def create_db(db: SQLAlchemy, app: Flask) -> None:
     try:
         if os.environ.get("ENVIRONMENT") == "DEV":
             env = "DEV"
-    except:
-        env = "Local"
+    finally:
+        env = "Local" if env is None else "DEV"
 
+    print("Current Environment:", env)
     if env == "DEV":
         app.config['SQLALCHEMY_DATABASE_URI'] = create_aws_db_uri()
     else:
