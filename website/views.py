@@ -41,7 +41,6 @@ def paczkomat(paczkomat_id):
             try:
             
                 rating_value = int(rating)
-                stars = "⭐" * rating_value
             except ValueError:
                 flash('Niepoprawna wartość oceny!', category='error')
                 return redirect(request.url)
@@ -50,7 +49,7 @@ def paczkomat(paczkomat_id):
             new_review = Reviews(
                 user_id=current_user.id,
                 code_id=paczkomat_id,
-                rating=stars,
+                rating=rating_value,
                 review=review
             )
 
