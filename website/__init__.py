@@ -51,4 +51,8 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
+    @app.route('/health')
+    def health_check():
+        return 'OK', 200
+
     return app
