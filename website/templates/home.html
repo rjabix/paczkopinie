@@ -33,6 +33,14 @@
             <a class="nav-item nav-link" id="home" href="/">Strona główna</a>
             <a class="nav-item nav-link" id="logout" href="/logout">Wyloguj</a>
         </div>
+
+        <div class="navbar-nav ml-auto">
+        {% if current_user.is_authenticated %}
+            <span class="navbar-text">
+                {{ current_user.nickname or current_user.username }}
+            </span>
+        {% endif %}
+    </div>
     </div>
 </nav>
 
