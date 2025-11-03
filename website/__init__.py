@@ -13,6 +13,10 @@ def create_app():
     app = Flask(__name__)
     # tymczasowy SECRET_KEY do testów — nie commitować w produkcji
     app.config['SECRET_KEY'] = 'C5hdRK11A1euASHPabKixDI47UARO2ZKgiIQ9vw'
+    
+    # Make admin check and config available in templates
+    from . import config
+    app.jinja_env.globals.update(config=config)
     create_db(db, app)
 
     from .views import views
