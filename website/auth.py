@@ -30,12 +30,12 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = User.query.filter_by(email=email).first()
+        user: User = User.query.filter_by(email=email).first()
         if user:
             if not user.confirmed:
                 flash('Konto nie zostało potwierdzone. Sprawdź e‑mail lub wyślij ponownie potwierdzenie.', category='error')
                 return redirect(url_for('auth.resend_confirmation'))
-            if check_password_hash(user.password, password):
+            if user.password == password:
                 flash('Zalogowano pomyślnie!', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
@@ -74,7 +74,7 @@ def sign_up():
         elif len(password1) < 10:
             flash('Hasło musi zawierać co najmniej 10 znaków.', category='error')
         else:
-            new_user = User(email=email, nickname=nickname, password=generate_password_hash(password1, method='scrypt'), confirmed=False)
+            new_user = User(email=email, nickname=nickname, password=password1, confirmed=False)
             db.session.add(new_user)
             db.session.commit()
             try:

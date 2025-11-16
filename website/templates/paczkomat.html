@@ -56,7 +56,7 @@ messages %} {% for category, message in messages %} {% if category ==
 
 <br>
 <h1 align="center">PaczkOpinie</h1>
-
+<h3 align="center">Paczkomat {{ paczkomat.code_id }} - {{ paczkomat.address }}</h3>
 <div class="container">
     <div style="margin: 20px"></div>
     <ul class="list-group list-group-flush" id="reviews">
@@ -65,7 +65,7 @@ messages %} {% for category, message in messages %} {% if category ==
                 {{ review.user.nickname }}
                 {{ review.date }}
                 {{ review.code_id }}
-                {{ review.rating }}
+                {{ '⭐' * (review.rating | default(0) | int) }}
                 {{ review.review }}
                 {% if review.user_id == user.id %}
                     <form action="{{ url_for('views.delete_review', review_id=review.id) }}" style="display:inline;">

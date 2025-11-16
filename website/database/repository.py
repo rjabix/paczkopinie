@@ -42,13 +42,17 @@ class Repository:
     def get_paczkomats_by_city(self, city_id: int) -> list[Paczkomats]:
         return Paczkomats.query.filter_by(city_id=city_id).all()
 
-    def get_paczkomats_and_number_of_reviews(self) -> dict[str, int]:
+    def get_paczkomat_by_code_id(self, code_id: str) -> Paczkomats | None:
+        return Paczkomats.query.filter_by(code_id=code_id).first()
+
+    def get_paczkomats_and_number_of_reviews(self) -> dict[Paczkomats, int]:
+        from ..models import Paczkomats
         results = self.db.session.query(
             Paczkomats,
             self.db.func.count(Reviews.id).label('review_count')
         ).outerjoin(Reviews, Paczkomats.code_id == Reviews.code_id
                     ).group_by(Paczkomats.code_id).all()
-        return {paczkomat.code_id: review_count for paczkomat, review_count in results}
+        return {paczkomat: review_count for paczkomat, review_count in results}
 
     # Review management
     def add_review(self, review: Reviews):

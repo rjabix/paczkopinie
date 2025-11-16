@@ -1,12 +1,14 @@
-import os
 from flask import Flask
 from flask_login import LoginManager
-from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
 from .database.dbFactory import create_db, seed_database
 
 mail = Mail()
 db = SQLAlchemy()
+migrate = Migrate()
 
 
 def create_app():
@@ -47,9 +49,14 @@ def create_app():
     )
 
     mail.init_app(app)
+    migrate.init_app(app, db)
 
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
+
+    @app.route('/health')
+    def health_check():
+        return 'OK', 200
 
     return app

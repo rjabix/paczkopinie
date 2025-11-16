@@ -34,6 +34,14 @@
             <a class="nav-item nav-link" id="miasta" href="/miasta">Miasta</a>
             <a class="nav-item nav-link" id="logout" href="/logout">Wyloguj</a>
         </div>
+
+        <div class="navbar-nav ml-auto">
+        {% if current_user.is_authenticated %}
+            <span class="navbar-text">
+                {{ current_user.nickname or current_user.username }}
+            </span>
+        {% endif %}
+    </div>
     </div>
 </nav>
 
@@ -59,6 +67,16 @@ messages %} {% for category, message in messages %} {% if category ==
 <h1 align="center">PaczkOpinie</h1>
 
 <div class="container">
+    <div style="margin: 20px"></div>
+    <ul class="list-group list-group-flush" id="paczkomats">
+        {% for paczkomat, number_of_reviews in paczkomats.items() %}
+            <li class="list-group-item">
+                <a href="{{ url_for('views.paczkomat', paczkomat_id=paczkomat.code_id) }}">
+                    Paczkomat {{ paczkomat.code_id }} - {{ paczkomat.address }} ({{ number_of_reviews }} opinii/a/e)
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
     <!-- Cities list -->
     <div class="row">
         <div class="col-12">
