@@ -34,6 +34,14 @@
             <a class="nav-item nav-link" id="logout" href="/logout">Wyloguj</a>
         </div>
     </div>
+
+    <div class="navbar-nav ml-auto">
+        {% if current_user.is_authenticated %}
+            <span class="navbar-text">
+                {{ current_user.nickname or current_user.username }}
+            </span>
+        {% endif %}
+    </div>
 </nav>
 
 {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %} {% if category == 'error' %}
@@ -58,12 +66,12 @@
 <div class="container">
     <div style="margin: 20px"></div>
     <ul class="list-group list-group-flush" id="paczkomats">
-        {% for paczkomat in paczkomats %}
+        {% for paczkomatCount in counts %}
             <li class="list-group-item">
-                <a href="{{ url_for('views.paczkomat', paczkomat_id=paczkomat.code_id) }}">
-                    Paczkomat {{ paczkomat.code_id }} ({{ counts.get(paczkomat.code_id, 0) }} opinii)
+                <a href="{{ url_for('views.paczkomat', paczkomat_id=paczkomatCount.paczkomat.code_id) }}">
+                    Paczkomat {{ paczkomatCount.paczkomat.code_id }} ({{ paczkomatCount.count }} opinii)
                 </a>
-                <div><small>{{ paczkomat.address }}</small></div>
+                <div><small>{{ paczkomatCount.paczkomat.address }}</small></div>
             </li>
         {% else %}
             <li class="list-group-item">Brak paczkomatów dla tego miasta.</li>

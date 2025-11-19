@@ -28,7 +28,7 @@ def home():
     """Show cities as the main page."""
     repository = Repository(current_user, db)
     cities = repository.get_all_cities_with_counts()
-    return render_template("home.html", cities=cities)
+    return render_template("home.html", cities=cities, current_user=current_user)
 
 
 @views.route('/delete_review/<int:review_id>', methods=['GET'])
@@ -85,9 +85,8 @@ def miasto(city_slug):
         flash('Nie znaleziono takiego miasta!', category='error')
         return redirect('/')
 
-    paczkomats = repository.get_paczkomats_by_city(city.id)
-    counts = repository.get_paczkomats_and_number_of_reviews()
-    return render_template("miasto.html", city=city, paczkomats=paczkomats, counts=counts)
+    counts = repository.get_paczkomats_by_city(city.id)
+    return render_template("miasto.html", city=city, counts=counts)
 
 
 @views.route('/dodaj_miasto', methods=['POST'])

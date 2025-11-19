@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from urllib.parse import quote_plus
 from ..models import Reviews, Paczkomats, User, City
+from ..utils.PaczkomatCount import PaczkomatCount
 
 
 class Repository:
@@ -39,8 +40,23 @@ class Repository:
         self.db.session.commit()
         return paczkomat
 
-    def get_paczkomats_by_city(self, city_id: int) -> list[Paczkomats]:
-        return Paczkomats.query.filter_by(city_id=city_id).all()
+    def get_paczkomats_by_city(self, city_id: int) -> list[tuple[Paczkomats, int]]:
+        results = self.db.session.query(
+            Paczkomats,
+            self.db.func.count(Reviews.id).label('review_count')
+        ).outerjoin(
+            Reviews, Paczkomats.code_id == Reviews.code_id
+        ).filter(
+            Paczkomats.city_id == city_id
+        ).group_by(
+            Paczkomats.code_id
+        ).all()
+
+        returnList = []
+        for paczkomat, review_count in results:
+            returnList.append(PaczkomatCount((paczkomat, review_count)))
+        return returnList
+        return [(paczkomat, review_count) for paczkomat, review_count in results]
 
     def get_paczkomat_by_code_id(self, code_id: str) -> Paczkomats | None:
         return Paczkomats.query.filter_by(code_id=code_id).first()
