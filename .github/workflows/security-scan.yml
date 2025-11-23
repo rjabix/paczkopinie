@@ -1,0 +1,58 @@
+name: Security Scan (Secrets + SAST)
+
+on:
+  # Trigger on push to main, master, or dev
+  push:
+    branches: [ "main", "master", "dev" ]
+  # Trigger on Pull Requests targeting main, master, or dev
+  pull_request:
+    branches: [ "main", "master", "dev" ]
+  workflow_dispatch:
+  
+jobs:
+  # JOB 1: Secrets Scanning
+  secrets_scan:
+    name: 🕵️ Secrets Scan (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code (Full History)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for Gitleaks to check commit history
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # JOB 2: Python Code Scanning (SAST + Vulnerabilities pip-audit)
+  
+  python_security:
+    name: Python Security (Bandit + Audit)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # Adjust version to match your project
+
+      - name: Install Security Tools
+        run: pip install bandit pip-audit
+
+      # SAST Step - Static Code Analysis
+      - name: Code Scan (Bandit)
+        # -r: recursive, -ll: reporting level Medium/High
+        run: bandit -r . -ll
+
+      # SCA Step - Library Vulnerability Analysis
+      - name: Dependency Scan (pip-audit)
+        # Checks if file exists to avoid error if missing
+        run: |
+          if [ -f requirements.txt ]; then
+            pip-audit -r requirements.txt
+          else
+            echo "⚠️ requirements.txt not found - skipping dependency scan."
+          fi
