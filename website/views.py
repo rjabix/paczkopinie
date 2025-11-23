@@ -136,3 +136,5 @@ def dodaj_paczkomat():
         flash(f'Błąd podczas dodawania paczkomatu: {str(e)}', category='error')
     
     return redirect(request.referrer or '/')
+
+password = 'slabehaslo' #leaks test
