@@ -69,6 +69,7 @@ messages %} {% for category, message in messages %} {% if category ==
                 {{ review.review }}
                 {% if review.user_id == user.id %}
                     <form action="{{ url_for('views.delete_review', review_id=review.id) }}" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <button type="submit" class="close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -80,6 +81,7 @@ messages %} {% for category, message in messages %} {% if category ==
 
     <br>
     <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="d-flex align-items-center">
             <i class="bi bi-star fs-2 rating-star" data-value="1"></i>
             <i class="bi bi-star fs-2 rating-star" data-value="2"></i>

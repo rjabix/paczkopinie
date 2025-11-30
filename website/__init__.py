@@ -3,18 +3,20 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_wtf import CSRFProtect
 
 from .database.dbFactory import create_db, seed_database
 
 mail = Mail()
 db = SQLAlchemy()
 migrate = Migrate()
-
+csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__)
     # tymczasowy SECRET_KEY do testów — nie commitować w produkcji
     app.config['SECRET_KEY'] = 'C5hdRK11A1euASHPabKixDI47UARO2ZKgiIQ9vw'
+    csrf.init_app(app)
     
     # Make admin check and config available in templates
     from . import config

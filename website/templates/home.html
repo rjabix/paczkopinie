@@ -95,6 +95,7 @@ messages %} {% for category, message in messages %} {% if category ==
                 <div class="card-body">
                     <h5 class="card-title">Dodaj nowe miasto</h5>
                     <form method="POST" action="{{ url_for('views.dodaj_miasto') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="form-group">
                             <input type="text" class="form-control" name="name" placeholder="Nazwa miasta" required>
                         </div>
@@ -110,6 +111,7 @@ messages %} {% for category, message in messages %} {% if category ==
                 <div class="card-body">
                     <h5 class="card-title">Dodaj nowy paczkomat</h5>
                     <form method="POST" action="{{ url_for('views.dodaj_paczkomat') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="form-group">
                             <input type="text" class="form-control mb-2" name="code_id" placeholder="Kod paczkomatu" required>
                             <select class="form-control mb-2" name="city_id" required>
