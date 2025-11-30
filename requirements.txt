@@ -8,3 +8,4 @@ dotenv~=0.9.9
 mysql-connector-python~=9.4.0
 flask_migrate
 alembic
+flask_wtf
