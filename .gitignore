@@ -1,7 +1,7 @@
+.env
 .venv
 .idea
 .vscode
 website/__pycache__
 website/database.db
-website/.env
 instance/database.db

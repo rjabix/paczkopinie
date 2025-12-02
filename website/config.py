@@ -1,4 +1,5 @@
 """
+MOŻE ZROBIĆ ZACZYTANIE SECRETS PODOBNIE JAK W __init__.py
 Configuration settings for the application.
 """
 import os
