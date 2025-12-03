@@ -10,7 +10,7 @@ from .database.dbFactory import create_db, seed_database
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Load .env file only if it exists, for local development
-if os.path.exists('env'):
+if os.path.exists('.env'):
     load_dotenv()
 
 mail = Mail()
@@ -20,11 +20,11 @@ csrf = CSRFProtect()
 
 SECURITY_HEADERS = {
     "Cache-Control": "no-store, max-age=0",
-    "Clear-Site-Data": "\"cache\",\"cookies\",\"storage\"",
+    "Clear-Site-Data": "\"cache\",\"storage\"",    #,\"cookies\"
     #"Content-Security-Policy": "default-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests",
-    #"Cross-Origin-Embedder-Policy": "require-corp",
-    #"Cross-Origin-Opener-Policy": "same-origin",
-    #"Cross-Origin-Resource-Policy": "same-origin",
+    "Cross-Origin-Embedder-Policy": "require-corp",
+    "Cross-Origin-Opener-Policy": "same-origin",
+    "Cross-Origin-Resource-Policy": "same-origin",
     "Permissions-Policy": "accelerometer=(), autoplay=(), camera=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(self), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(), gamepad=(), hid=(), idle-detection=(), interest-cohort=(), serial=(), unload=()",
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
     "X-Content-Type-Options": "nosniff",
@@ -36,7 +36,7 @@ SECURITY_HEADERS = {
 def create_app():
     app = Flask(__name__)
     # Secrets are stored in local .env OR in AWS Beanstalk configuration, os.environ works in both environment
-    app.config['SECRET_KEY'] = 'FGHGFHFGHGGFHFGH'
+    app.config['SECRET_KEY'] = os.environ.get('APP_SECRET_KEY')
     app.config['MAIL_USERNAME'] = os.environ.get('MAIL_ACCOUNT')
     app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 
