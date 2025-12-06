@@ -50,11 +50,12 @@ def create_app():
         # konfiguracja SMTP (w testach wstawiamy wartości bezpośrednio)
         # MOŻE PRZENIEŚĆ DO SECRETS
         #MAIL user i pw tu bo inaczej bledny mail przychodzi
+        SECRET_KEY = os.environ.get('APP_SECRET_KEY'),
+        MAIL_SERVER='smtp.gmail.com',
+        MAIL_PORT=587,
+        MAIL_USE_TLS=True,
         MAIL_USERNAME = os.environ.get('MAIL_ACCOUNT'),
         MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD'),
-        MAIL_SERVER = 'smtp.gmail.com',
-        MAIL_PORT = 587,
-        MAIL_USE_TLS = True,
     )
 
     mail.init_app(app)
