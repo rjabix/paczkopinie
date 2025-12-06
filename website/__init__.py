@@ -4,8 +4,7 @@ from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import CSRFProtect
-import os
-from dotenv import load_dotenv
+
 from .database.dbFactory import create_db, seed_database
 
 # Load .env file only if it exists, for local development
@@ -19,11 +18,8 @@ csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__)
-    # Secrets are stored in local .env OR in AWS Beanstalk configuration, os.environ works in both environment
-    app.config['SECRET_KEY'] = os.environ.get('APP_SECRET_KEY')
-    app.config['MAIL_USERNAME'] = os.environ.get('MAIL_ACCOUNT')
-    app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-
+    # tymczasowy SECRET_KEY do testów — nie commitować w produkcji
+    app.config['SECRET_KEY'] = 'C5hdRK11A1euASHPabKixDI47UARO2ZKgiIQ9vw'
     csrf.init_app(app)
     
     # Make admin check and config available in templates
