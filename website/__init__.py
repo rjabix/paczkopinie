@@ -4,7 +4,7 @@ from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import CSRFProtect
-import os
+import os.path
 from dotenv import load_dotenv
 from .database.dbFactory import create_db, seed_database
 
