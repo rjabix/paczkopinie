@@ -7,6 +7,10 @@ from flask_wtf import CSRFProtect
 
 from .database.dbFactory import create_db, seed_database
 
+# Load .env file only if it exists, for local development
+if os.path.exists('.env'):
+    load_dotenv()
+
 mail = Mail()
 db = SQLAlchemy()
 migrate = Migrate()
@@ -42,12 +46,10 @@ def create_app():
 
     app.config.update(
         # konfiguracja SMTP (w testach wstawiamy wartości bezpośrednio)
-        SECRET_KEY = app.config['SECRET_KEY'],
+        # MOŻE PRZENIEŚĆ DO SECRETS
         MAIL_SERVER = 'smtp.gmail.com',
         MAIL_PORT = 587,
         MAIL_USE_TLS = True,
-        MAIL_USERNAME = 'paczkopinie@gmail.com',
-        MAIL_PASSWORD = 'nxxx nidm degt yniq',
     )
 
     mail.init_app(app)
