@@ -44,7 +44,7 @@ def create_app():
 
     # If your app runs behind a reverse proxy/load balancer (e.g. nginx, Cloudflare),
     # enable ProxyFix and set the number of proxies in front of your app:
-    # app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
     
     # Make admin check and config available in templates
     from . import config
@@ -96,6 +96,14 @@ def create_app():
             else:
                 # Don't overwrite headers already set by your app unless you want to force them:
                 response.headers.setdefault(name, value)
+
+        # Usuwanie niepożądanych nagłówków
+        # Uwaga: W produkcji (np. Gunicorn/Nginx) te serwery mogą ponownie dodać nagłówek 'Server'.
+        # W takim przypadku należy go wyłączyć również w konfiguracji serwera WSGI/HTTP.
+        headers_to_remove = ['Server', 'X-Powered-By']
+        for header in headers_to_remove:
+            response.headers.pop(header, None)
+
         return response
 
     @app.route('/health')
