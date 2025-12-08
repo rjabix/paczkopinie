@@ -45,7 +45,7 @@ jobs:
       # SAST Step - Static Code Analysis
       - name: Code Scan (Bandit)
         # -r: recursive, -ll: reporting level Medium/High
-        run: bandit -r . -ll
+        run: bandit -r .
 
       # SCA Step - Library Vulnerability Analysis
       - name: Dependency Scan (pip-audit)
