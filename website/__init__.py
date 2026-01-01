@@ -19,7 +19,7 @@ def create_app():
 
     csrf.init_app(app)
     
-    # Make admin check and config available in templates
+    # Globally accessible variables, functions for HTML templates
     from . import config
     app.jinja_env.globals.update(config=config)
 
