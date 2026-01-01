@@ -9,7 +9,9 @@ if os.path.exists('.env'):
 app = create_app()
 
 if __name__ == '__main__':
-    if os.environ.get("ENVIRONMENT") == "local":
+    env = os.environ.get("ENVIRONMENT")
+    print(" * Environment: " + env)
+    if env == "local":
         app.run(debug=True) # Debug only for testing purposes, it allows for Python code in browser
     else:
         app.run(debug=False)
