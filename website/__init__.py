@@ -4,14 +4,9 @@ from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import CSRFProtect
-import os.path
-from dotenv import load_dotenv
-from .database.dbFactory import create_db, seed_database
 from werkzeug.middleware.proxy_fix import ProxyFix
+import os.path
 
-# Load .env file only if it exists, for local development
-if os.path.exists('.env'):
-    load_dotenv()
 
 mail = Mail()
 db = SQLAlchemy()
@@ -40,74 +35,58 @@ def create_app():
 
     csrf.init_app(app)
 
-    # If your app runs behind a reverse proxy/load balancer (e.g. nginx, Cloudflare),
-    # enable ProxyFix and set the number of proxies in front of your app:
+    # For production environment with reverse proxy/load balancer, ProxyFit is required for headers
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
     
-    # Make admin check and config available in templates
+    # Globally accessible variables, functions for HTML templates
     from . import config
     app.jinja_env.globals.update(config=config)
+
+    from .database.dbFactory import create_db, seed_database
     create_db(db, app)
-
-    from .views import views
-    from .auth import auth
-
-    app.register_blueprint(views, url_prefix='/')
-    app.register_blueprint(auth, url_prefix='/')
-
-    from .models import User, Paczkomats, Reviews
-    
+    from .models import User, Paczkomats, Reviews, City
     with app.app_context():
         db.create_all()
         seed_database(db)
+
+    from .views import views
+    from .auth import auth
+    app.register_blueprint(views, url_prefix='/')
+    app.register_blueprint(auth, url_prefix='/')
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-
     app.config.update(
-        # konfiguracja SMTP (w testach wstawiamy wartości bezpośrednio)
-        # MOŻE PRZENIEŚĆ DO SECRETS
-        #MAIL user i pw tu bo inaczej bledny mail przychodzi
-        SECRET_KEY = os.environ.get('APP_SECRET_KEY'),
-        MAIL_SERVER='smtp.gmail.com',
-        MAIL_PORT=587,
-        MAIL_USE_TLS=True,
+        MAIL_SERVER=os.environ.get('MAIL_SERVER'),
+        MAIL_PORT=os.environ.get('MAIL_PORT'),
+        MAIL_USE_TLS=os.environ.get('MAIL_USE_TLS'),
         MAIL_USERNAME = os.environ.get('MAIL_ACCOUNT'),
         MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD'),
     )
-
     mail.init_app(app)
     migrate.init_app(app, db)
 
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
-
+    
     @app.after_request
     def add_security_headers(response):
         # Add all headers. Send HSTS only if request is secure (HTTPS).
         for name, value in SECURITY_HEADERS.items():
             if name == "Strict-Transport-Security":
-                # Only append HSTS on secure requests to avoid forcing HSTS on http dev sites.
-                # If you're behind a proxy that terminates TLS, ensure ProxyFix is enabled
-                # and the proxy forwards X-Forwarded-Proto so request.is_secure is accurate.
                 if request.is_secure:
                     response.headers.setdefault(name, value)
             else:
-                # Don't overwrite headers already set by your app unless you want to force them:
                 response.headers.setdefault(name, value)
-
-        # Usuwanie niepożądanych nagłówków
-        # Uwaga: W produkcji (np. Gunicorn/Nginx) te serwery mogą ponownie dodać nagłówek 'Server'.
-        # W takim przypadku należy go wyłączyć również w konfiguracji serwera WSGI/HTTP.
+        # Removing of unwanted headers. ! In production env, servers can still add some headers (look server WSGI/HTTP settings)
         headers_to_remove = ['Server', 'X-Powered-By']
         for header in headers_to_remove:
             response.headers.pop(header, None)
-
         return response
-
+    
     @app.route('/health')
     def health_check():
         return 'OK', 200

@@ -1,43 +1,25 @@
 import os
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
 from website.database.cloudHelper import create_aws_db_uri
 
 LOCAL_DB_NAME = "database.db"
 
-
 def create_db(db: SQLAlchemy, app: Flask) -> None:
-    env: str = None
-    try:
-        if os.environ.get("ENVIRONMENT") == "DEV":
-            env = "DEV"
-    finally:
-        env = "Local" if env is None else "DEV"
-
-    print("Current Environment:", env)
-    if env == "DEV":
+    env = os.environ.get("ENVIRONMENT")
+    if env == "Production":
         app.config['SQLALCHEMY_DATABASE_URI'] = create_aws_db_uri()
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{LOCAL_DB_NAME}'
-
     db.init_app(app)
-    
-    with app.app_context():
-        # Import models so they are known to SQLAlchemy
-        from website.models import User, Reviews, City, Paczkomats
-        
-        # Create tables if they don't exist
-        db.create_all()
 
+# Fill in Paczkomats to database and fill empty city_id of Paczkomats records
 def seed_database(db: SQLAlchemy) -> None:
     from website.models import Paczkomats, City
 
-    # First, check if we need to migrate existing data
     existing_paczkomats = Paczkomats.query.all()
     if existing_paczkomats and not hasattr(Paczkomats, 'city_id'):
-        # Create a temporary table
+        # Temporary tables
         db.session.execute('''
             CREATE TABLE IF NOT EXISTS paczkomats_temp (
                 code_id VARCHAR(10) PRIMARY KEY,
@@ -47,8 +29,6 @@ def seed_database(db: SQLAlchemy) -> None:
                 FOREIGN KEY(city_id) REFERENCES city(id)
             )
         ''')
-        
-        # Create the city table if it doesn't exist
         db.session.execute('''
             CREATE TABLE IF NOT EXISTS city (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,7 +37,6 @@ def seed_database(db: SQLAlchemy) -> None:
             )
         ''')
 
-    # Add sample data if the database is empty
     if City.query.first() is None:
         wroclaw = City(name='Wrocław', slug='wroclaw')
         db.session.add(wroclaw)
