@@ -5,12 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import CSRFProtect
 import os.path
-from dotenv import load_dotenv
-from .database.dbFactory import create_db, seed_database
 
-# Load .env file only if it exists, for local development
-if os.path.exists('.env'):
-    load_dotenv()
 
 mail = Mail()
 db = SQLAlchemy()
@@ -27,6 +22,8 @@ def create_app():
     # Make admin check and config available in templates
     from . import config
     app.jinja_env.globals.update(config=config)
+
+    from .database.dbFactory import create_db, seed_database
     create_db(db, app)
 
     from .views import views
@@ -50,6 +47,7 @@ def create_app():
         # konfiguracja SMTP (w testach wstawiamy wartości bezpośrednio)
         # MOŻE PRZENIEŚĆ DO SECRETS
         #MAIL user i pw tu bo inaczej bledny mail przychodzi
+        # ???? chyba nie, trzeba uporządkować i przetestować na aws, obecnie dziala
         SECRET_KEY = os.environ.get('APP_SECRET_KEY'),
         MAIL_SERVER='smtp.gmail.com',
         MAIL_PORT=587,
