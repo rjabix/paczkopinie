@@ -30,15 +30,15 @@ SECURITY_HEADERS = {
 
 def create_app():
     app = Flask(__name__)
-    # Secrets are stored in local .env OR in AWS Beanstalk configuration, os.environ works in both environment
+    
+    # Sekrety sa przechowywane w lokalnym pliku .env LUB w konfiguracji AWS Beanstalk, os.environ dziala w obu srodowiskach
     app.config['SECRET_KEY'] = os.environ.get('APP_SECRET_KEY')
 
     csrf.init_app(app)
 
-    # For production environment with reverse proxy/load balancer, ProxyFit is required for headers
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
     
-    # Globally accessible variables, functions for HTML templates
+    # Zmienne i funkcje dostępne globalnie w szablonach HTML
     from . import config
     app.jinja_env.globals.update(config=config)
 
@@ -74,14 +74,14 @@ def create_app():
     
     @app.after_request
     def add_security_headers(response):
-        # Add all headers. Send HSTS only if request is secure (HTTPS).
+        # Dodaj wszystkie nagłówki.
         for name, value in SECURITY_HEADERS.items():
             if name == "Strict-Transport-Security":
                 if request.is_secure:
                     response.headers.setdefault(name, value)
             else:
                 response.headers.setdefault(name, value)
-        # Removing of unwanted headers. ! In production env, servers can still add some headers (look server WSGI/HTTP settings)
+        # Usuwanie niepożądanych nagłówków.
         headers_to_remove = ['Server', 'X-Powered-By']
         for header in headers_to_remove:
             response.headers.pop(header, None)

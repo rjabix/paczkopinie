@@ -6,12 +6,15 @@ from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 
 
+# Blueprint dla uwierzytelniania (logowanie, rejestracja)
 auth = Blueprint('auth', __name__)
 
+# Pomocniczy serializer do tokenów potwierdzających e-mail
 def _get_serializer():
     return URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
 
 
+# Wyślij e-mail z linkiem potwierdzającym konto
 def send_confirmation_email(user_email):
     ts = _get_serializer()
     token = ts.dumps(user_email, salt='email-confirm-salt')
@@ -23,6 +26,7 @@ def send_confirmation_email(user_email):
 
 
 
+# Obsługa logowania (GET: formularz, POST: przetwarzanie danych)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -46,6 +50,7 @@ def login():
     return render_template("login.html", user=current_user)
 
 
+# Wyloguj użytkownika
 @auth.route('/logout')
 @login_required
 def logout():
@@ -53,6 +58,7 @@ def logout():
     return redirect(url_for('auth.login'))
 
 
+# Rejestracja nowego użytkownika
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
@@ -86,6 +92,7 @@ def sign_up():
     return render_template("sign_up.html", user=current_user)
 
 
+# Potwierdzenie adresu e-mail (token z linku)
 @auth.route('/confirm/<token>')
 def confirm_email(token):
     ts = _get_serializer()
@@ -109,6 +116,7 @@ def confirm_email(token):
     return redirect(url_for('auth.login'))
 
 
+# Ponowne wysłanie e-maila potwierdzającego
 @auth.route('/resend-confirmation', methods=['GET', 'POST'])
 def resend_confirmation():
     if request.method == 'POST':
