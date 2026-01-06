@@ -1,4 +1,4 @@
-# Globally accessible variables, functions for HTML templates
+# Zmienne dostępne globalnie
 import os
 
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL")
